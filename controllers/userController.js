@@ -52,9 +52,21 @@ const loginUser = async (req, res) => {
   }
 };
 
+// get user
+const getUser = async(req, res) => {
+  try {
+    const user = await User.find();
+    
+    res.json(user);
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Logout user (simply removing token on the frontend)
 const logoutUser = (req, res) => {
   res.json({ message: "Logged out successfully" });
 };
 
-module.exports = { registerUser, loginUser, logoutUser };
+module.exports = { registerUser, loginUser, logoutUser, getUser };
