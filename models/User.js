@@ -5,6 +5,10 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  transfer: { type: Number, default: 0 },
+  deposit: { type: Number, default: 0 },
+  receive: { type: Number, default: 0 },
+  send: { type: Number, default: 0 },
 });
 
 // Encrypt password before saving

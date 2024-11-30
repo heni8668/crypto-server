@@ -2,8 +2,11 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
+  fetchAllUsers,
+  fetchUser,
+  updateUser,
+  deleteUser,
   logoutUser,
-  getUser,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -13,8 +16,12 @@ router.post("/register", registerUser);
 
 // Login user
 router.post("/login", loginUser);
+router.get("/", fetchAllUsers);
+router.get("/:id", fetchUser);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
 
-router.get('/getuser', getUser);
+
 
 // Logout user
 router.post("/logout", logoutUser);
