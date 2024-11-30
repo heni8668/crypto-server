@@ -50,29 +50,46 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  // Check if all fields are provided
   if (!email || !password) {
     return res.status(400).json({ message: "Please fill all fields" });
   }
 
   try {
+    // Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // Validate the password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // Generate JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.json({ token });
+
+    // Send user data along with the token
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        
+        name: user.name,
+        email: user.email,
+        // role: user.role, 
+      },
+    });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    console.error("Login Error:", error.message); // Log the actual error for debugging
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
+
 
 // Fetch all users
 const fetchAllUsers = async (req, res) => {
